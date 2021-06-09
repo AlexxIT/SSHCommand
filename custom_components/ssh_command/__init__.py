@@ -29,3 +29,7 @@ def setup(hass, hass_config):
     hass.services.register(DOMAIN, 'exec_command', exec_command)
 
     return True
+
+
+async def async_setup_entry(hass, entry):
+    return True
