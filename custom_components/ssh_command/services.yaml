@@ -22,7 +22,7 @@ exec_command:
       selector:
         text:
 
-    password:
+    pass:
       default: raspberry
       example: raspberry
       selector:
