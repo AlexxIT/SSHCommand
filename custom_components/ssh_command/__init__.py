@@ -13,7 +13,7 @@ def setup(hass, hass_config):
         host = call.data.get('host', '172.17.0.1')
         port = call.data.get('port', 22)
         username = call.data.get('user', 'pi')
-        password = call.data.get('pass', 'raspberry')
+        password = call.data.get('password', 'raspberry')
         command = call.data.get('command')
 
         client = SSHClient()
