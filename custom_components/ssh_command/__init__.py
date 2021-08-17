@@ -1,19 +1,35 @@
 import logging
 
+import voluptuous as vol
+
 from homeassistant.core import ServiceCall
+from homeassistant.const import CONF_HOST, CONF_PORT, CONF_USERNAME, CONF_PASSWORD
+from homeassistant.helpers import config_validation as cv
 from paramiko import SSHClient, AutoAddPolicy
 
 _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = 'ssh_command'
 
+SSH_COMMAND_SCHEMA = vol.All(
+    vol.Schema({
+        vol.Optional(CONF_HOST): cv.string,
+        vol.Optional(CONF_PORT): cv.string,
+        vol.Optional(CONF_USERNAME): cv.string,
+        vol.Optional(CONF_PASSWORD): cv.string,
+    }, extra=vol.PREVENT_EXTRA))
+
+CONFIG_SCHEMA = vol.Schema({
+    DOMAIN: SSH_COMMAND_SCHEMA
+}, extra=vol.ALLOW_EXTRA)
 
 def setup(hass, hass_config):
+    hass.data[DOMAIN] = hass_config.get(DOMAIN, {})
     async def exec_command(call: ServiceCall):
-        host = call.data.get('host', '172.17.0.1')
-        port = call.data.get('port', 22)
-        username = call.data.get('user', 'pi')
-        password = call.data.get('pass', 'raspberry')
+        host = call.data.get('host', hass.data[DOMAIN].get(CONF_HOST, '172.17.0.1'))
+        port = call.data.get('port', hass.data[DOMAIN].get(CONF_PORT, 22))
+        username = call.data.get('user', hass.data[DOMAIN].get(CONF_USERNAME, 'pi'))
+        password = call.data.get('pass', hass.data[DOMAIN].get(CONF_PASSWORD, 'raspberry'))
         command = call.data.get('command')
 
         client = SSHClient()

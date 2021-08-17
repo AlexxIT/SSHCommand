@@ -24,6 +24,10 @@ If the integration is not in the list, you need to clear the browser cache.
 
 ```yaml
 ssh_command:
+  host: 192.168.1.123 # Optional
+  port: 22 # Optional
+  username: pi # Optional
+  password: raspberry # Optional
 ```
 
 ## Usage
@@ -38,6 +42,7 @@ script:
     - service: ssh_command.exec_command
       data:
         host: 192.168.1.123
+        port: 22
         user: pi
         pass: raspberry
         command: ls -la
