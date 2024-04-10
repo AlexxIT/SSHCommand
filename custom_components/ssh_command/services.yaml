@@ -33,3 +33,8 @@ exec_command:
       required: true
       selector:
         text:
+
+    ssh_private_key_path:
+      example: /config/ssh/id_rsa
+      selector:
+        text:
