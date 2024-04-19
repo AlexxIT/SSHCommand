@@ -1,7 +1,6 @@
 import logging
 
 import voluptuous as vol
-from homeassistant.const import CONF_HOST, CONF_PORT, CONF_USERNAME, CONF_PASSWORD
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers import config_validation as cv
 from paramiko import AutoAddPolicy, RSAKey, SSHClient
@@ -10,31 +9,28 @@ _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = "ssh_command"
 
-SSH_COMMAND_SCHEMA = vol.All(
-    vol.Schema(
-        {
-            vol.Optional(CONF_HOST): cv.string,
-            vol.Optional(CONF_PORT): cv.string,
-            vol.Optional(CONF_USERNAME): cv.string,
-            vol.Optional(CONF_PASSWORD): cv.string,
-            vol.Optional("private_key"): cv.string,
-        },
-        extra=vol.PREVENT_EXTRA,
-    )
+DEFAULT_SCHEMA = vol.Schema(
+    {
+        vol.Optional("host", default="172.17.0.1"): cv.string,
+        vol.Optional("port", default=22): cv.port,
+        vol.Optional("user", default="pi"): cv.string,
+        vol.Optional("pass", default="raspberry"): cv.string,
+    },
+    extra=vol.PREVENT_EXTRA,
 )
 
-CONFIG_SCHEMA = vol.Schema({DOMAIN: SSH_COMMAND_SCHEMA}, extra=vol.ALLOW_EXTRA)
+CONFIG_SCHEMA = vol.Schema({DOMAIN: DEFAULT_SCHEMA}, extra=vol.ALLOW_EXTRA)
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
-    config: dict = config.get(DOMAIN) or {}
+    default = config[DOMAIN] if DOMAIN in config else DEFAULT_SCHEMA({})
 
     def exec_command(call: ServiceCall):
-        host = call.data.get("host", config.get(CONF_HOST, "172.17.0.1"))
-        port = call.data.get("port", config.get(CONF_PORT, 22))
-        username = call.data.get("user", config.get(CONF_USERNAME, "pi"))
-        password = call.data.get("pass", config.get(CONF_PASSWORD, "raspberry"))
-        command = call.data.get("command")
+        host = call.data.get("host", default["host"])
+        port = call.data.get("port", default["port"])
+        username = call.data.get("user", default["user"])
+        password = call.data.get("pass", default["pass"])
+        command = call.data["command"]
 
         client = SSHClient()
         client.set_missing_host_key_policy(AutoAddPolicy())
@@ -62,9 +58,7 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
 
     # ServiceResponse from Hass 2023.7
     # https://github.com/home-assistant/core/blob/2023.7.0/homeassistant/core.py
-    hass.services.async_register(
-        DOMAIN, "exec_command", exec_command, SSH_COMMAND_SCHEMA
-    )
+    hass.services.async_register(DOMAIN, "exec_command", exec_command)
 
     return True
 

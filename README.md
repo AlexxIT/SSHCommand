@@ -49,12 +49,12 @@ script:
         command: ls -la
 ```
 
-If you want use secrets, add them to `configuration.yaml`:
+If you want use secrets or change default values, add them to `configuration.yaml`:
 
 ```yaml
 ssh_command:
-  host: 192.168.1.123  # Optional
-  port: 22  # Optional
-  username: pi  # Optional
-  password: !secret ssh_parssword  # Optional
+  host: 192.168.1.123
+  port: 22
+  user: pi
+  pass: !secret ssh_parssword
 ```
