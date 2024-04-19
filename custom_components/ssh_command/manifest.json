@@ -1,12 +1,16 @@
 {
   "domain": "ssh_command",
   "name": "SSH Command",
+  "codeowners": [
+    "@AlexxIT"
+  ],
   "config_flow": true,
-  "documentation": "https://github.com/AlexxIT/SSHCommand",
-  "issue_tracker": "https://github.com/AlexxIT/DashCast/issues",
-  "codeowners": ["@AlexxIT"],
   "dependencies": [],
-  "requirements": ["paramiko"],
-  "version": "1.0.0",
-  "iot_class": "calculated"
+  "documentation": "https://github.com/AlexxIT/SSHCommand",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/AlexxIT/DashCast/issues",
+  "requirements": [
+    "paramiko"
+  ],
+  "version": "1.0.0"
 }
