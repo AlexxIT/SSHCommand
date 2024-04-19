@@ -47,3 +47,18 @@ script:
         pass: raspberry
         command: ls -la
 ```
+
+if you want connect with ssh key, use this
+
+```yaml
+script:
+  run_on_host:
+    alias: Run shell command on host
+    sequence:
+    - service: ssh_command.exec_command
+      data:
+        host: 192.168.1.123
+        user: pi
+        ssh_private_key_path: /config/ssh/id_rsa
+        command: ls -la
+```

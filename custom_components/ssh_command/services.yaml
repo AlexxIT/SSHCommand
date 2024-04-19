@@ -22,7 +22,7 @@ exec_command:
       selector:
         text:
 
-    password:
+    pass:
       default: raspberry
       example: raspberry
       selector:
@@ -31,5 +31,10 @@ exec_command:
     command:
       example: ls -la
       required: true
+      selector:
+        text:
+
+    ssh_private_key_path:
+      example: /config/ssh/id_rsa
       selector:
         text:
