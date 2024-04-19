@@ -1,4 +1,9 @@
 {
+  "config": {
+    "abort": {
+      "single_instance_allowed": "Already configured. Only a single configuration possible."
+    }
+  },
   "services": {
     "exec_command": {
       "name": "Execute command",
