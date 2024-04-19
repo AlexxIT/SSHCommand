@@ -1,34 +1,22 @@
 # SSHCommand for Home Assistant
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
-
-This [Home Assistant](https://www.home-assistant.io/) service allows you to run SSH commands on remote host. Example main host from Docker container with Hass.
+Run any SSH command on remote server from [Home Assistant](https://www.home-assistant.io/) service call. For example, the command on the main host from the docker container.
 
 ## Installation
 
-**Method 1.** [HACS](https://hacs.xyz/) custom repo:
+## Installation
 
-> HACS > Integrations > 3 dots (upper top corner) > Custom repositories > URL: `AlexxIT/SSHCommand`, Category: Integration > Add > wait > SSHCommand > Install
+[HACS](https://hacs.xyz/) custom repository: `AlexxIT/SSHCommand`.
 
-**Method 2.** Manually copy `ssh_command` folder from [latest release](https://github.com/AlexxIT/SSHCommand/releases/latest) to `/config/custom_components` folder.
+[![](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=AlexxIT&repository=SSHCommand&category=Integration)
+
+Or manually copy `ssh_command` folder from [latest release](https://github.com/AlexxIT/SSHCommand/releases/latest) to `/config/custom_components` folder.
 
 ## Configuration
 
-**Method 1.** GUI:
+Add integration via Home Assistant UI or `configuration.yaml`.
 
-> Configuration > Integrations > Add Integration > **SSHCommand**
-
-If the integration is not in the list, you need to clear the browser cache.
-
-**Method 2.** YAML:
-
-```yaml
-ssh_command:
-  host: 192.168.1.123 # Optional
-  port: 22 # Optional
-  username: pi # Optional
-  password: raspberry # Optional
-```
+[![](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=ssh_command)
 
 ## Usage
 
@@ -48,7 +36,7 @@ script:
         command: ls -la
 ```
 
-if you want connect with ssh key, use this
+If you want connect with ssh key, use this:
 
 ```yaml
 script:
@@ -59,6 +47,16 @@ script:
       data:
         host: 192.168.1.123
         user: pi
-        ssh_private_key_path: /config/ssh/id_rsa
+        private_key: /config/ssh/id_rsa
         command: ls -la
+```
+
+If you want use secrets, add them to `configuration.yaml`:
+
+```yaml
+ssh_command:
+  host: 192.168.1.123  # Optional
+  port: 22  # Optional
+  username: pi  # Optional
+  password: !secret ssh_parssword  # Optional
 ```
