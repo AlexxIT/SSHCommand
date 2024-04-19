@@ -1,0 +1,34 @@
+{
+  "services": {
+    "exec_command": {
+      "name": "Execute command",
+      "description": "Execute SSH command",
+      "fields": {
+        "host": {
+          "name": "Host",
+          "description": ""
+        },
+        "port": {
+          "name": "Port",
+          "description": ""
+        },
+        "user": {
+          "name": "Username",
+          "description": ""
+        },
+        "pass": {
+          "name": "Password",
+          "description": ""
+        },
+        "command": {
+          "name": "Command",
+          "description": ""
+        },
+        "private_key": {
+          "name": "Private key",
+          "description": ""
+        }
+      }
+    }
+  }
+}

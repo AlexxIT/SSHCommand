@@ -1,13 +1,10 @@
 exec_command:
-  name: Execute command
-  description: 'Execute SSH command'
   fields:
     host:
       default: 172.17.0.1
       example: 172.17.0.1
       selector:
         text:
-
     port:
       default: 22
       example: 22
@@ -15,26 +12,22 @@ exec_command:
         number:
           min: 1
           max: 65535
-
     user:
       default: pi
       example: pi
       selector:
         text:
-
     pass:
       default: raspberry
       example: raspberry
       selector:
         text:
-
     command:
       example: ls -la
       required: true
       selector:
         text:
-
-    ssh_private_key_path:
+    private_key:
       example: /config/ssh/id_rsa
       selector:
         text:
