@@ -4,8 +4,6 @@ Run any SSH command on remote server from [Home Assistant](https://www.home-assi
 
 ## Installation
 
-## Installation
-
 [HACS](https://hacs.xyz/) custom repository: `AlexxIT/SSHCommand`.
 
 [![](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=AlexxIT&repository=SSHCommand&category=Integration)
