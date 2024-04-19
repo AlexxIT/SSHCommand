@@ -1,7 +1,7 @@
 import logging
 
 from homeassistant.core import ServiceCall
-from paramiko import SSHClient, AutoAddPolicy
+from paramiko import AutoAddPolicy, RSAKey, SSHClient
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -15,10 +15,22 @@ def setup(hass, hass_config):
         username = call.data.get('user', 'pi')
         password = call.data.get('pass', 'raspberry')
         command = call.data.get('command')
+        ssh_private_key_path = call.data.get('ssh_private_key_path')
 
         client = SSHClient()
         client.set_missing_host_key_policy(AutoAddPolicy())
-        client.connect(host, port, username, password)
+
+        if ssh_private_key_path:
+            try:
+                key = RSAKey.from_private_key_file(ssh_private_key_path)
+                client.connect(host, port, username, pkey=key)
+            except Exception as e:
+                _LOGGER.error(f"Failed to connect using SSH key: {e}")
+                return
+        else:
+            # Use password for authentication if SSH key is not provided
+            client.connect(host, port, username, password)
+
         stdin, stdout, stderr = client.exec_command(command)
         data = stdout.read()
         stderr.read()
