@@ -31,3 +31,10 @@ exec_command:
       example: /config/ssh/id_rsa
       selector:
         text:
+    timeout:
+      example: 30
+      default: 5
+      selector:
+        number:
+          min: 1
+          max: 60
