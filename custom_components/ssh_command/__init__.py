@@ -15,6 +15,7 @@ DEFAULT_SCHEMA = vol.Schema(
         vol.Optional("port", default=22): cv.port,
         vol.Optional("user", default="pi"): cv.string,
         vol.Optional("pass", default="raspberry"): cv.string,
+        vol.Optional("timeout", default=5): cv.positive_int,
     },
     extra=vol.PREVENT_EXTRA,
 )
@@ -30,6 +31,7 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         port = call.data.get("port", default["port"])
         username = call.data.get("user", default["user"])
         password = call.data.get("pass", default["pass"])
+        timeout = call.data.get("timeout", default["timeout"])
         command = call.data["command"]
 
         client = SSHClient()
@@ -38,15 +40,20 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         try:
             if private_key := call.data.get("private_key"):
                 key = RSAKey.from_private_key_file(private_key)
-                client.connect(host, port, username, pkey=key)
+                client.connect(host, port, username, pkey=key, timeout=timeout)
             else:
                 # Use password for authentication if SSH key is not provided
-                client.connect(host, port, username, password)
+                client.connect(host, port, username, password, timeout=timeout)
         except Exception as e:
             _LOGGER.error(f"Failed to connect: {repr(e)}")
             return {"error": repr(e)}
 
-        _, stdout, stderr = client.exec_command(command)
+        try:
+            _, stdout, stderr = client.exec_command(command, timeout=timeout)
+        except TimeoutError as e:
+            _LOGGER.error(f"Command execution timeout")
+            return {"error": repr(e)}
+
         response = {
             "command": command,
             "stdout": stdout.read().decode("utf-8"),

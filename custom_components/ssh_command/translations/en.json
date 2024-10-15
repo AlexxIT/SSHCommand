@@ -32,6 +32,10 @@
         "private_key": {
           "name": "Private key",
           "description": ""
+        },
+        "timeout": {
+          "name": "Connection timeout",
+          "description": ""
         }
       }
     }
