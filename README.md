@@ -32,6 +32,7 @@ script:
         user: pi
         pass: raspberry
         command: ls -la
+        timeout: 5
 ```
 
 If you want connect with ssh key, use this:
@@ -47,6 +48,7 @@ script:
         user: pi
         private_key: /config/ssh/id_rsa
         command: ls -la
+        timeout: 5
 ```
 
 If you want use secrets or change default values, add them to `configuration.yaml`:
@@ -57,4 +59,5 @@ ssh_command:
   port: 22
   user: pi
   pass: !secret ssh_parssword
+  timeout: 5
 ```
