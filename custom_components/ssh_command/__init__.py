@@ -3,7 +3,7 @@ import logging
 import voluptuous as vol
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers import config_validation as cv
-from paramiko import AutoAddPolicy, RSAKey, SSHClient
+from paramiko import AutoAddPolicy, SSHClient
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -39,8 +39,13 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
 
         try:
             if private_key := call.data.get("private_key"):
-                key = RSAKey.from_private_key_file(private_key)
-                client.connect(host, port, username, pkey=key, timeout=timeout)
+                client.connect(
+                    host,
+                    port,
+                    username,
+                    key_filename=private_key,
+                    passphrase=call.data.get("passphrase"),
+                )
             else:
                 # Use password for authentication if SSH key is not provided
                 client.connect(host, port, username, password, timeout=timeout)

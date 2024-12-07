@@ -33,6 +33,10 @@
           "name": "Private key",
           "description": ""
         },
+        "passphrase": {
+          "name": "Key passphrase",
+          "description": ""
+        },
         "timeout": {
           "name": "Connection timeout",
           "description": ""
