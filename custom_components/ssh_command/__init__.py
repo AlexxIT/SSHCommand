@@ -35,7 +35,9 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         kwargs["password"] = kwargs.pop("pass", None)
         kwargs["key_filename"] = kwargs.pop("private_key", None)
 
-        command = kwargs.pop("command")
+        commands = kwargs.pop("command")
+        if isinstance(commands, str):
+            commands = [commands]
 
         client = SSHClient()
         client.set_missing_host_key_policy(AutoAddPolicy())
@@ -43,10 +45,12 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         try:
             client.connect(**kwargs)
 
-            _, stdout, stderr = client.exec_command(
-                command, timeout=kwargs.get("timeout")
-            )
+            for command in commands:
+                _, stdout, stderr = client.exec_command(
+                    command, timeout=kwargs.get("timeout")
+                )
 
+            # noinspection PyUnboundLocalVariable
             return {
                 "stdout": stdout.read().decode("utf-8"),
                 "stderr": stderr.read().decode("utf-8"),
