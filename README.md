@@ -32,10 +32,9 @@ script:
         user: pi
         pass: raspberry
         command: ls -la
-        timeout: 5
 ```
 
-If you want connect with ssh key, use this:
+Advanced usage:
 
 ```yaml
 script:
@@ -44,11 +43,15 @@ script:
     sequence:
     - service: ssh_command.exec_command
       data:
-        host: 192.168.1.123
-        user: pi
-        private_key: /config/ssh/id_rsa
-        command: ls -la
-        timeout: 5
+        host: 192.168.1.123              # required hostname
+        user: pi                         # required username
+        pass: secret                     # optional password
+        private_key: /config/ssh/id_rsa  # optional private key filename
+        passphrase: secret               # optional private key passphrase
+        timeout: 5                       # optional timeout
+        command:                         # also support multiple commands
+          - touch somefile.tmp
+          - ls -la
 ```
 
 If you want use secrets or change default values, add them to `configuration.yaml`:
@@ -59,5 +62,4 @@ ssh_command:
   port: 22
   user: pi
   pass: !secret ssh_parssword
-  timeout: 5
 ```
