@@ -9,6 +9,10 @@
       "name": "Execute command",
       "description": "Execute SSH command",
       "fields": {
+        "command": {
+          "name": "Command",
+          "description": ""
+        },
         "host": {
           "name": "Host",
           "description": ""
@@ -25,12 +29,8 @@
           "name": "Password",
           "description": ""
         },
-        "command": {
-          "name": "Command",
-          "description": ""
-        },
         "private_key": {
-          "name": "Private key",
+          "name": "Key filename",
           "description": ""
         },
         "passphrase": {
