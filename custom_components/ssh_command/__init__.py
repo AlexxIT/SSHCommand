@@ -26,7 +26,7 @@ CONFIG_SCHEMA = vol.Schema({DOMAIN: DEFAULT_SCHEMA}, extra=vol.ALLOW_EXTRA)
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     default = config[DOMAIN] if DOMAIN in config else DEFAULT_SCHEMA({})
 
-    def exec_command(call: ServiceCall):
+    def exec_command(call: ServiceCall) -> dict:
         host = call.data.get("host", default["host"])
         port = call.data.get("port", default["port"])
         username = call.data.get("user", default["user"])
@@ -61,11 +61,23 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         }
         client.close()
 
-        _LOGGER.info(response)
+        _LOGGER.debug(response)
 
-    # ServiceResponse from Hass 2023.7
-    # https://github.com/home-assistant/core/blob/2023.7.0/homeassistant/core.py
-    hass.services.async_register(DOMAIN, "exec_command", exec_command)
+        return response
+
+    try:
+        # ServiceResponse from Hass 2023.7
+        # https://github.com/home-assistant/core/blob/2023.7.0/homeassistant/core.py
+        from homeassistant.core import SupportsResponse
+
+        hass.services.async_register(
+            DOMAIN,
+            "exec_command",
+            exec_command,
+            supports_response=SupportsResponse.OPTIONAL,
+        )
+    except ImportError:
+        hass.services.async_register(DOMAIN, "exec_command", exec_command)
 
     return True
 
